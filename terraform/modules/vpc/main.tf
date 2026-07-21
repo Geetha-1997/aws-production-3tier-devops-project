@@ -10,4 +10,4 @@ resource "aws_vpc" "this" {
     Environment = var.environment
     Project     = var.project_name
   }
-}
+} 
