@@ -49,3 +49,18 @@ main.tf
 variables.tf
 outputs.tf
 ```
+## versions.tf
+
+The `versions.tf` file defines the required Terraform CLI version and AWS provider version.
+
+### Purpose
+
+- Ensures version consistency across all developers.
+- Prevents incompatible Terraform versions.
+- Downloads the official HashiCorp AWS provider.
+- Improves reproducibility in CI/CD pipelines.
+
+### Provider
+
+- Terraform >= 1.8
+- AWS Provider 5.xs
