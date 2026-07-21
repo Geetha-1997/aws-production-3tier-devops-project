@@ -13,36 +13,26 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "availability_zone_1" {
-  description = "First Availability Zone"
-  type        = string
+variable "availability_zones" {
+  description = "Availability Zones"
+
+  type = list(string)
 }
 
-variable "availability_zone_2" {
-  description = "Second Availability Zone"
-  type        = string
+variable "public_subnet_cidrs" {
+  description = "Public Subnet CIDRs"
+
+  type = list(string)
 }
 
-variable "public_subnet_1_cidr" {
-  type = string
+variable "private_app_subnet_cidrs" {
+  description = "Private App Subnet CIDRs"
+
+  type = list(string)
 }
 
-variable "public_subnet_2_cidr" {
-  type = string
-}
+variable "private_db_subnet_cidrs" {
+  description = "Private Database Subnet CIDRs"
 
-variable "private_app_subnet_1_cidr" {
-  type = string
-}
-
-variable "private_app_subnet_2_cidr" {
-  type = string
-}
-
-variable "private_db_subnet_1_cidr" {
-  type = string
-}
-
-variable "private_db_subnet_2_cidr" {
-  type = string
+  type = list(string)
 }

@@ -1,9 +1,24 @@
 output "vpc_id" {
-  description = "ID of the VPC"
+  description = "VPC ID"
   value       = aws_vpc.this.id
+}
+
+output "vpc_arn" {
+  description = "VPC ARN"
+  value       = aws_vpc.this.arn
 }
 
 output "vpc_cidr" {
   description = "CIDR block of the VPC"
   value       = aws_vpc.this.cidr_block
-} 
+}
+
+output "default_security_group_id" {
+  description = "Default Security Group ID"
+  value       = aws_vpc.this.default_security_group_id
+}
+
+output "default_route_table_id" {
+  description = "Default Route Table ID"
+  value       = aws_vpc.this.default_route_table_id
+}
