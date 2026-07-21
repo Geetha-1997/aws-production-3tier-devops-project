@@ -1,27 +1,31 @@
 # VPC Module
 
-## Purpose
+## Description
 
-This module creates the Virtual Private Cloud (VPC) for the project.
+This Terraform module creates a production-ready AWS Virtual Private Cloud (VPC).
 
 ## Features
 
 - Creates a VPC
-- Enables DNS support
-- Enables DNS hostnames
-- Applies standard tags
+- Enables DNS Support
+- Enables DNS Hostnames
+- Applies common tags
+- Exports VPC information
 
 ## Inputs
 
 | Variable | Description |
 |----------|-------------|
-| project_name | Name of the project |
-| environment | Deployment environment |
-| vpc_cidr | CIDR block for the VPC |
+| project_name | Project Name |
+| environment | Environment |
+| vpc_cidr | VPC CIDR |
+| enable_dns_support | Enable DNS Support |
+| enable_dns_hostnames | Enable DNS Hostnames |
 
 ## Outputs
 
-| Output | Description |
-|---------|-------------|
-| vpc_id | VPC ID |
-| vpc_cidr | VPC CIDR Block |
+- VPC ID
+- VPC ARN
+- CIDR Block
+- Default Security Group ID
+- Default Route Table ID

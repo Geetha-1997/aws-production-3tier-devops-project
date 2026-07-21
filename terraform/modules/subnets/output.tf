@@ -1,11 +1,14 @@
 output "public_subnet_ids" {
-
-  value = aws_subnet.public[*].id
-
+  description = "IDs of public subnets"
+  value       = aws_subnet.public[*].id
 }
 
-output "public_subnet_arns" {
+output "private_app_subnet_ids" {
+  description = "IDs of private application subnets"
+  value       = aws_subnet.private_app[*].id
+}
 
-  value = aws_subnet.public[*].arn
-
+output "private_db_subnet_ids" {
+  description = "IDs of private database subnets"
+  value       = aws_subnet.private_db[*].id
 }

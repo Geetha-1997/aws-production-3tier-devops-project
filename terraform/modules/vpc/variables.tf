@@ -1,15 +1,15 @@
 variable "project_name" {
-  description = "Project Name"
+  description = "Project name"
   type        = string
 }
 
 variable "environment" {
-  description = "Environment Name"
+  description = "Environment name"
   type        = string
 }
 
 variable "vpc_cidr" {
-  description = "CIDR Block"
+  description = "VPC CIDR Block"
   type        = string
 }
 
