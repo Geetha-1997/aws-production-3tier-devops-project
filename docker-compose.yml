@@ -1,0 +1,9 @@
+services:
+  app:
+    image: geetha5/production-app:latest
+    container_name: production-app
+
+    ports:
+      - "3000:3000"
+
+    restart: always

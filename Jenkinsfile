@@ -49,7 +49,7 @@ pipeline {
 
         stage('Verify Docker Image') {
             steps {
-                bat "docker images"
+                bat 'docker images'
             }
         }
 
@@ -69,7 +69,41 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
+                bat "docker tag %IMAGE_NAME%:%IMAGE_TAG% %IMAGE_NAME%:latest"
                 bat "docker push %IMAGE_NAME%:%IMAGE_TAG%"
+                bat "docker push %IMAGE_NAME%:latest"
+            }
+        }
+
+        stage('Stop Existing Container') {
+            steps {
+                bat '''
+                docker stop production-app-container || exit 0
+                docker rm production-app-container || exit 0
+                '''
+            }
+        }
+
+        stage('Pull Latest Image') {
+            steps {
+                bat 'docker pull geetha5/production-app:latest'
+            }
+        }
+
+        stage('Deploy Container') {
+            steps {
+                bat '''
+                docker run -d ^
+                --name production-app-container ^
+                -p 3000:3000 ^
+                geetha5/production-app:latest
+                '''
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                bat 'docker ps'
             }
         }
     }
