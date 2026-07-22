@@ -14,6 +14,23 @@ pipeline {
             }
         }
 
+        stage('Terraform Format Check') {
+            steps {
+                dir('terraform') {
+                    bat 'terraform fmt -check -recursive'
+                }
+            }
+        }
+
+        stage('Terraform Validate') {
+            steps {
+                dir('terraform') {
+                    bat 'terraform init -backend=false'
+                    bat 'terraform validate'
+                }
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
                 dir('app') {
@@ -43,7 +60,6 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-
                     bat '''
                     echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
                     '''
@@ -59,7 +75,6 @@ pipeline {
     }
 
     post {
-
         success {
             echo 'Pipeline completed successfully!'
         }
@@ -70,22 +85,6 @@ pipeline {
 
         always {
             cleanWs()
-        }
-    }
-}
-stage('Terraform Format Check') {
-    steps {
-        dir('terraform') {
-            bat 'terraform fmt -check -recursive'
-        }
-    }
-}
-
-stage('Terraform Validate') {
-    steps {
-        dir('terraform') {
-            bat 'terraform init -backend=false'
-            bat 'terraform validate'
         }
     }
 }
