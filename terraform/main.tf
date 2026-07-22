@@ -318,3 +318,16 @@ module "sns" {
   notification_email = var.notification_email
 
 }
+######################################################
+# SQS
+######################################################
+
+module "sqs" {
+
+  source = "./modules/sqs"
+
+  project_name = var.project_name
+
+  environment = var.environment
+
+}
