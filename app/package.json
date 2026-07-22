@@ -1,0 +1,12 @@
+{
+  "name": "production-app",
+  "version": "1.0.0",
+  "description": "AWS Production 3 Tier DevOps Project",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
