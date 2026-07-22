@@ -66,3 +66,12 @@ variable "app_instance_type" {
   type        = string
   default     = "t3.micro"
 }
+variable "hosted_zone_id" {
+  description = "Route53 Hosted Zone ID"
+  type        = string
+}
+
+variable "domain_name" {
+  description = "Application Domain"
+  type        = string
+}

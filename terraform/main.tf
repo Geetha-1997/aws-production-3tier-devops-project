@@ -252,3 +252,43 @@ module "autoscaling" {
   min_size         = 2
   max_size         = 4
 }
+######################################################
+# RDS
+######################################################
+
+module "rds" {
+
+  source = "./modules/rds"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  db_name     = var.db_name
+  db_username = var.db_username
+  db_password = var.db_password
+
+  db_subnet_ids = module.subnets.private_db_subnet_ids
+
+  security_group_id = module.security_groups.rds_security_group_id
+
+}
+######################################################
+# Route53
+######################################################
+
+module "route53" {
+
+  source = "./modules/route53"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  hosted_zone_id = var.hosted_zone_id
+
+  domain_name = var.domain_name
+
+  alb_dns_name = module.alb.alb_dns_name
+
+  alb_zone_id = module.alb.alb_zone_id
+
+}
