@@ -94,15 +94,3 @@ variable "db_password" {
   type      = string
   sensitive = true
 }
-
-variable "notification_email" {
-  type = string
-}
-
-variable "hosted_zone_id" {
-  type = string
-}
-
-variable "domain_name" {
-  type = string
-}

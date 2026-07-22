@@ -331,19 +331,3 @@ module "sqs" {
   environment = var.environment
 
 }
-######################################################
-# CloudWatch
-######################################################
-
-module "cloudwatch" {
-
-  source = "./modules/cloudwatch"
-
-  project_name = var.project_name
-  environment  = var.environment
-
-  autoscaling_group_name = module.autoscaling.autoscaling_group_name
-
-  sns_topic_arn = module.sns.topic_arn
-
-}
