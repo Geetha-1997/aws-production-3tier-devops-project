@@ -292,3 +292,29 @@ module "route53" {
   alb_zone_id = module.alb.alb_zone_id
 
 }
+module "cloudwatch" {
+
+  source = "./modules/cloudwatch"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  autoscaling_group_name = module.autoscaling.autoscaling_group_name
+
+  sns_topic_arn = module.sns.topic_arn
+
+}
+######################################################
+# SNS
+######################################################
+
+module "sns" {
+
+  source = "./modules/sns"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  notification_email = var.notification_email
+
+}
