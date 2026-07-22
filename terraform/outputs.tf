@@ -29,6 +29,11 @@ output "bastion_public_ip" {
 output "database_endpoint" {
   value = module.rds.db_endpoint
 }
+output "database_name" {
+
+  value = module.rds.db_name
+
+}
 
 output "sns_topic_arn" {
   value = module.sns.topic_arn

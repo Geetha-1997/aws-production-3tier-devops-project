@@ -1,3 +1,14 @@
+##################################################
+# Existing Hosted Zone
+##################################################
+
+data "aws_route53_zone" "this" {
+
+  name         = var.domain_name
+
+  private_zone = false
+
+}
 resource "aws_route53_record" "website" {
 
   zone_id = var.hosted_zone_id
