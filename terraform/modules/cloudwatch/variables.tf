@@ -11,6 +11,6 @@ variable "autoscaling_group_name" {
 }
 
 variable "sns_topic_arn" {
-  type = string
+  type    = string
   default = ""
 }
