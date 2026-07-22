@@ -73,3 +73,19 @@ pipeline {
         }
     }
 }
+stage('Terraform Format Check') {
+    steps {
+        dir('terraform') {
+            bat 'terraform fmt -check -recursive'
+        }
+    }
+}
+
+stage('Terraform Validate') {
+    steps {
+        dir('terraform') {
+            bat 'terraform init -backend=false'
+            bat 'terraform validate'
+        }
+    }
+}
