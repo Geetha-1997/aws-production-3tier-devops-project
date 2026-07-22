@@ -48,3 +48,21 @@ variable "key_name" {
   description = "EC2 Key Pair Name"
   type        = string
 }
+variable "certificate_arn" {
+  description = "ACM Certificate ARN"
+  type        = string
+}
+####################################################
+# Application EC2 Variables
+####################################################
+
+variable "app_ami" {
+  description = "AMI ID for Application Servers"
+  type        = string
+}
+
+variable "app_instance_type" {
+  description = "Application EC2 Instance Type"
+  type        = string
+  default     = "t3.micro"
+}

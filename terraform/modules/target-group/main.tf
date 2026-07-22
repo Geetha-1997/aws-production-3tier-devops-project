@@ -1,9 +1,9 @@
 resource "aws_lb_target_group" "this" {
 
-  name        = "${var.project_name}-${var.environment}-tg"
+  name = "${var.project_name}-${var.environment}-tg"
 
-  port        = var.port
-  protocol    = var.protocol
+  port     = var.port
+  protocol = var.protocol
 
   target_type = "instance"
 

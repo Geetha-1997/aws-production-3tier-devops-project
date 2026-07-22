@@ -42,7 +42,7 @@ module "subnets" {
 
 module "internet_gateway" {
 
-  source = "./modules/internet_gateway"
+  source = "./modules/internet-gateway"
 
   project_name = var.project_name
   environment  = var.environment
@@ -57,7 +57,7 @@ module "internet_gateway" {
 
 module "elastic_ip" {
 
-  source = "./modules/elastic_ip"
+  source = "./modules/elastic-ip"
 
   project_name = var.project_name
   environment  = var.environment
@@ -70,7 +70,7 @@ module "elastic_ip" {
 
 module "nat_gateway" {
 
-  source = "./modules/nat_gateway"
+  source = "./modules/nat-gateway"
 
   project_name = var.project_name
   environment  = var.environment
@@ -87,7 +87,7 @@ module "nat_gateway" {
 
 module "route_tables" {
 
-  source = "./modules/route_tables"
+  source = "./modules/route-tables"
 
   project_name = var.project_name
   environment  = var.environment
@@ -112,7 +112,7 @@ module "route_tables" {
 
 module "security_groups" {
 
-  source = "./modules/security_groups"
+  source = "./modules/security-groups"
 
   project_name = var.project_name
   environment  = var.environment
@@ -166,7 +166,7 @@ module "bastion" {
 
 module "target_group" {
 
-  source = "./modules/target_group"
+  source = "./modules/target-group"
 
   project_name = var.project_name
   environment  = var.environment
@@ -192,4 +192,63 @@ module "alb" {
 
   security_group_id = module.security_groups.alb_security_group_id
 
+}
+##############################################
+# ALB Listener
+##############################################
+
+module "alb_listener" {
+
+  source = "./modules/alb-listener"
+
+  alb_arn = module.alb.alb_arn
+
+  target_group_arn = module.target_group.target_group_arn
+
+  certificate_arn = var.certificate_arn
+
+}
+######################################################
+# Auto Scaling Group
+######################################################
+##############################################
+# Launch Template
+##############################################
+
+module "launch_template" {
+
+  source = "./modules/launch-template"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  ami_id = var.app_ami
+
+  instance_type = var.app_instance_type
+
+  security_group_id = module.security_groups.app_security_group_id
+
+  iam_instance_profile = module.iam.instance_profile_name
+
+  key_name = var.key_name
+
+}
+module "autoscaling" {
+
+  source = "./modules/autoscaling"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  launch_template_id = module.launch_template.launch_template_id
+
+  private_subnet_ids = module.subnets.private_app_subnet_ids
+
+  target_group_arns = [
+    module.target_group.target_group_arn
+  ]
+
+  desired_capacity = 2
+  min_size         = 2
+  max_size         = 4
 }
