@@ -44,3 +44,14 @@ hosted_zone_id = "Z0123456789ABCDEFG"
 
 domain_name = "app.example.com"
 notification_email = "your-email@example.com"
+db_name = "productiondb"
+
+db_username = "admin"
+
+db_password = "ChangeMe123!"
+
+notification_email = "your-email@example.com"
+
+hosted_zone_id = "Z0123456789ABCDEFG"
+
+domain_name = "app.example.com"
