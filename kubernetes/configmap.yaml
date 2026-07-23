@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: production-app-config
+  namespace: production
+
+data:
+  NODE_ENV: "production"
+  APP_NAME: "Production App"
+  APP_PORT: "3000"
+  LOG_LEVEL: "info"   
