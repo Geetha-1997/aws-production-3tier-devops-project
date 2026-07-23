@@ -1,28 +1,25 @@
 @echo off
 
 echo =====================================
-echo Pulling Latest Docker Images
+echo Pull Latest Docker Images
 echo =====================================
 
 docker compose pull
 
-echo.
-
 echo =====================================
-echo Stopping Old Containers
+echo Stop Existing Containers
 echo =====================================
 
 docker compose down
 
-echo.
+docker rm -f production-app 2>nul
+docker rm -f nginx 2>nul
 
 echo =====================================
-echo Starting New Containers
+echo Start New Containers
 echo =====================================
 
 docker compose up -d
-
-echo.
 
 echo =====================================
 echo Deployment Completed
