@@ -49,17 +49,19 @@ pipeline {
 
         stage('Verify Docker Image') {
             steps {
-                bat 'docker images'
+                bat "docker images"
             }
         }
 
         stage('Docker Login') {
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-creds',
-                    usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASS'
-                )]) {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )
+                ]) {
                     bat '''
                     echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
                     '''
@@ -75,29 +77,9 @@ pipeline {
             }
         }
 
-        stage('Stop Existing Container') {
+        stage('Deploy Application') {
             steps {
-                bat '''
-                docker stop production-app-container || exit 0
-                docker rm production-app-container || exit 0
-                '''
-            }
-        }
-
-        stage('Pull Latest Image') {
-            steps {
-                bat 'docker pull geetha5/production-app:latest'
-            }
-        }
-
-        stage('Deploy Container') {
-            steps {
-                bat '''
-                docker run -d ^
-                --name production-app-container ^
-                -p 3000:3000 ^
-                geetha5/production-app:latest
-                '''
+                bat 'deploy\\deploy.bat'
             }
         }
 
@@ -107,18 +89,21 @@ pipeline {
             }
         }
     }
-        stage('Deploy Application') {
-    steps {
-        bat 'deploy\\deploy.bat'
-    }
-}
+
     post {
+
         success {
-            echo 'Pipeline completed successfully!'
+            echo "======================================="
+            echo "Pipeline completed successfully!"
+            echo "Application deployed successfully."
+            echo "======================================="
         }
 
         failure {
-            echo 'Pipeline failed.'
+            echo "======================================="
+            echo "Pipeline failed."
+            echo "Please check the build logs."
+            echo "======================================="
         }
 
         always {
