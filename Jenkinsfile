@@ -107,7 +107,11 @@ pipeline {
             }
         }
     }
-
+        stage('Deploy Application') {
+    steps {
+        bat 'deploy\\deploy.bat'
+    }
+}
     post {
         success {
             echo 'Pipeline completed successfully!'
