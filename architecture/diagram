@@ -1,0 +1,139 @@
+                                          🌍 INTERNET
+                                               │
+                                        Registered Domain
+                                               │
+                                           Amazon Route 53
+                                               │
+                                    AWS WAF + AWS Shield
+                                               │
+                                     AWS Certificate Manager
+                                      (SSL/TLS Certificate)
+                                               │
+                                Application Load Balancer (ALB)
+                                               │
+══════════════════════════════════════════════════════════════════════
+                     AWS REGION (ap-south-1)
+══════════════════════════════════════════════════════════════════════
+
+                           Production VPC (10.0.0.0/16)
+
+      ┌───────────────────────────────┬───────────────────────────────┐
+      │       Availability Zone A     │      Availability Zone B      │
+      │          ap-south-1a          │         ap-south-1b           │
+      ├───────────────────────────────┼───────────────────────────────┤
+
+      PUBLIC SUBNET A                 │      PUBLIC SUBNET B
+      10.0.1.0/24                     │      10.0.2.0/24
+
+      • NAT Gateway                   │      • NAT Gateway
+      • Bastion Host                  │      • Bastion Host
+      • Internet Gateway              │
+
+─────────────────────────────────────────────────────────────────────
+
+      PRIVATE APP SUBNET A            │      PRIVATE APP SUBNET B
+      10.0.11.0/24                    │      10.0.12.0/24
+
+        ┌─────────────────────┐          ┌─────────────────────┐
+        │  EKS Worker Node 1  │          │  EKS Worker Node 2  │
+        │─────────────────────│          │─────────────────────│
+        │ Docker              │          │ Docker              │
+        │ containerd          │          │ containerd          │
+        │ kubelet             │          │ kubelet             │
+        │ kube-proxy          │          │ kube-proxy          │
+        │ Nginx               │          │ Nginx               │
+        │ Application Pods    │          │ Application Pods    │
+        └─────────────────────┘          └─────────────────────┘
+
+                    Amazon EKS Control Plane
+                 (Managed Kubernetes Cluster)
+
+                          │
+               Kubernetes Services
+               ClusterIP / LoadBalancer
+
+                          │
+                Horizontal Pod Autoscaler
+
+─────────────────────────────────────────────────────────────────────
+
+      PRIVATE DATABASE SUBNET A       │      PRIVATE DATABASE SUBNET B
+      10.0.21.0/24                    │      10.0.22.0/24
+
+      Amazon RDS Primary              Amazon RDS Standby
+          PostgreSQL/MySQL     ←→     Multi-AZ Replication
+
+══════════════════════════════════════════════════════════════════════
+
+                    Monitoring & Security
+
+                 Amazon CloudWatch
+                        │
+                    CloudWatch Logs
+                        │
+                     CloudWatch Alarms
+                        │
+                    Amazon SNS Alerts
+
+══════════════════════════════════════════════════════════════════════
+
+                  CI/CD PIPELINE
+
+Developer
+    │
+    ▼
+GitHub Repository
+    │
+Webhook
+    ▼
+GitHub Actions
+    │
+Build Docker Image
+    │
+Push Image
+    ▼
+Amazon ECR
+    │
+Pull Image
+    ▼
+Jenkins
+    │
+Terraform Apply
+    │
+Helm Upgrade
+    │
+kubectl Apply
+    ▼
+Amazon EKS Cluster
+
+══════════════════════════════════════════════════════════════════════
+
+Infrastructure as Code
+
+Terraform
+   │
+   ├── VPC
+   ├── Subnets
+   ├── Internet Gateway
+   ├── NAT Gateway
+   ├── Route Tables
+   ├── Security Groups
+   ├── IAM
+   ├── Launch Templates
+   ├── Auto Scaling
+   ├── ALB
+   ├── EKS
+   ├── RDS
+   ├── Route53
+   ├── CloudWatch
+   ├── SNS
+   └── SQS
+
+Remote Backend
+
+Amazon S3
+    │
+Terraform State
+    │
+DynamoDB
+(State Locking)
