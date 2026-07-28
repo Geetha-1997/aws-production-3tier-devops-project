@@ -77,15 +77,17 @@ pipeline {
             }
         }
 
-        stage('Deploy Application') {
+        stage('Deploy to Kubernetes') {
             steps {
-                bat 'deploy\\deploy.bat'
+                bat 'scripts\\deploy-k8s.bat'
             }
         }
 
-        stage('Verify Deployment') {
+        stage('Verify Kubernetes Deployment') {
             steps {
-                bat 'docker ps'
+                bat 'kubectl rollout status deployment/production-app -n production'
+                bat 'kubectl get pods -n production'
+                bat 'kubectl get svc -n production'
             }
         }
     }
