@@ -1,0 +1,13 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+
+metadata:
+  name: production-app-pdb
+  namespace: production
+
+spec:
+  minAvailable: 1
+
+  selector:
+    matchLabels:
+      app: production-app

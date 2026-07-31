@@ -1,0 +1,57 @@
+replicaCount: 2
+
+image:
+  repository: geetha5/production-app
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+config:
+  NODE_ENV: production
+  APP_NAME: Production App
+  APP_PORT: "3000"
+  LOG_LEVEL: info
+
+secret:
+  DB_HOST: mysql
+  DB_PORT: "3306"
+  DB_USER: admin
+  DB_PASSWORD: password
+
+storage:
+  storageClass: standard
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 128Mi
+
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+ingress:
+  enabled: true
+
+  className: nginx
+
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+
+  hosts:
+    - host: production.local
+      paths:
+        - path: /
+          pathType: Prefix

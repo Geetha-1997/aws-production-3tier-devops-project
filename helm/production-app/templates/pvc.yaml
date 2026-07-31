@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: production-app-pvc
+
+spec:
+  accessModes:
+    - {{ .Values.storage.accessMode }}
+
+  resources:
+    requests:
+      storage: {{ .Values.storage.size }}
+
+  storageClassName: {{ .Values.storage.storageClass }}

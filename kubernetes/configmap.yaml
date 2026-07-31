@@ -7,6 +7,6 @@ metadata:
 
 data:
   NODE_ENV: "production"
-  APP_NAME: "Production App"
+  APP_NAME: "AWS Production 3-Tier DevOps Project"
   APP_PORT: "3000"
-  LOG_LEVEL: "info"   
+  LOG_LEVEL: "info"

@@ -10,8 +10,7 @@ spec:
     app: production-app
 
   ports:
-    - protocol: TCP
-      port: 80
+    - port: 80
       targetPort: 3000
 
   type: ClusterIP

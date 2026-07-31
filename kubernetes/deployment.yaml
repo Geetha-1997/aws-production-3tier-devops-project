@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: production-app
   namespace: production
-
+  serviceAccountName: production-app-sa 
 spec:
   replicas: 2
 
@@ -14,10 +14,9 @@ spec:
 
   strategy:
     type: RollingUpdate
-
     rollingUpdate:
-      maxUnavailable: 1
       maxSurge: 1
+      maxUnavailable: 0
 
   template:
     metadata:
@@ -26,60 +25,51 @@ spec:
 
     spec:
       containers:
-        - name: production-app
+      - name: production-app
 
-          image: geetha5/production-app:latest
+        image: geetha5/production-app:latest
+        imagePullPolicy: Always
 
-          imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
 
-          ports:
-            - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: production-app-config
 
-          envFrom:
-            - configMapRef:
-                name: production-app-config
+        - secretRef:
+            name: production-app-secret
 
-            - secretRef:
-                name: production-app-secret
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "128Mi"
 
-          resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
 
-            requests:
-              memory: "128Mi"
-              cpu: "250m"
+        volumeMounts:
+        - name: app-storage
+          mountPath: /app/data
 
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
 
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
 
-            initialDelaySeconds: 30
-            periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
 
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
 
-            initialDelaySeconds: 5
-            periodSeconds: 5
-
-# Terraform outputs for SQS queue (kept as comments)
-# output "queue_url" {
-#   description = "URL of the SQS Queue"
-#   value       = aws_sqs_queue.this.id
-# }
-#
-# output "queue_arn" {
-#   description = "ARN of the SQS Queue"
-#   value       = aws_sqs_queue.this.arn
-# }
-#
-# output "queue_name" {
-#   description = "Name of the SQS Queue"
-#   value       = aws_sqs_queue.this.name
-# }
+      volumes:
+      - name: app-storage
+        persistentVolumeClaim:
+          claimName: production-app-pvc  
