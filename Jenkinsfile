@@ -3,7 +3,11 @@ pipeline {
 
     environment {
         IMAGE_NAME = "geetha5/production-app"
-        IMAGE_TAG = "${BUILD_NUMBER}"
+        IMAGE_TAG  = "${BUILD_NUMBER}"
+
+        // Jenkins runs as LocalSystem
+        // Use the Kubernetes config available to Jenkins
+        KUBECONFIG = "C:\\ProgramData\\Jenkins\\.kube\\config"
     }
 
     stages {
@@ -34,7 +38,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 dir('app') {
-                    bat 'npm install'
+                    bat 'npm ci'
                 }
             }
         }
@@ -49,7 +53,7 @@ pipeline {
 
         stage('Verify Docker Image') {
             steps {
-                bat "docker images"
+                bat 'docker images'
             }
         }
 
@@ -63,7 +67,7 @@ pipeline {
                     )
                 ]) {
                     bat '''
-                    echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+                        echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
                     '''
                 }
             }
@@ -77,25 +81,13 @@ pipeline {
             }
         }
 
-        stage('Test Jenkins Kubernetes Access') {
+        stage('Verify Kubernetes Access') {
             steps {
-                bat '''
-                echo ===== Jenkins Identity =====
-                whoami
+                bat 'echo ===== Kubernetes Context ====='
+                bat 'kubectl config current-context'
 
-                echo ===== User Profile =====
-                echo %USERPROFILE%
-
-                echo ===== Kubernetes Config =====
-                set KUBECONFIG=C:\\ProgramData\\Jenkins\\.kube\\config
-                echo %KUBECONFIG%
-
-                echo ===== Kubernetes Context =====
-                kubectl config current-context
-
-                echo ===== Kubernetes Nodes =====
-                kubectl get nodes
-                '''
+                bat 'echo ===== Kubernetes Nodes ====='
+                bat 'kubectl get nodes'
             }
         }
 
@@ -107,7 +99,7 @@ pipeline {
 
         stage('Verify Kubernetes Deployment') {
             steps {
-                bat 'kubectl rollout status deployment/production-app -n production'
+                bat 'kubectl rollout status deployment/production-app -n production --timeout=180s'
                 bat 'kubectl get pods -n production'
                 bat 'kubectl get svc -n production'
             }
