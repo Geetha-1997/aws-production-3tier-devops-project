@@ -79,7 +79,7 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                bat 'scripts\\deploy-k8s.bat'
+                bat 'scripts\\deploy-k8s.bat %IMAGE_TAG%'
             }
         }
 
