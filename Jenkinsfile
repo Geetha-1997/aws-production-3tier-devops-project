@@ -77,6 +77,28 @@ pipeline {
             }
         }
 
+        stage('Test Jenkins Kubernetes Access') {
+            steps {
+                bat '''
+                echo ===== Jenkins Identity =====
+                whoami
+
+                echo ===== User Profile =====
+                echo %USERPROFILE%
+
+                echo ===== Kubernetes Config =====
+                set KUBECONFIG=C:\\ProgramData\\Jenkins\\.kube\\config
+                echo %KUBECONFIG%
+
+                echo ===== Kubernetes Context =====
+                kubectl config current-context
+
+                echo ===== Kubernetes Nodes =====
+                kubectl get nodes
+                '''
+            }
+        }
+
         stage('Deploy to Kubernetes') {
             steps {
                 bat 'scripts\\deploy-k8s.bat %IMAGE_TAG%'
